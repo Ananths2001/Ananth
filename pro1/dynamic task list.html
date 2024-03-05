@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="taskListApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Task List Manager</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.task-list {
+  margin-top: 20px;
+}
+.task-item {
+  margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="TaskListController as taskListCtrl">
+  <h1>Dynamic Task List Manager</h1>
+  <form ng-submit="taskListCtrl.addTask()">
+    <div class="form-group">
+      <label for="taskName">Task Name:</label>
+      <input type="text" class="form-control" id="taskName" ng-model="taskListCtrl.newTaskName" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Task</button>
+  </form>
+  <ul class="list-group task-list">
+    <li class="list-group-item task-item" ng-repeat="task in taskListCtrl.tasks">
+      {{ task.name }}
+      <button class="btn btn-default btn-xs" ng-click="taskListCtrl.editTask(task)">Edit</button>
+      <button class="btn btn-danger btn-xs" ng-click="taskListCtrl.deleteTask(task)">Delete</button>
+    </li>
+  </ul>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+angular.module('taskListApp', [])
+  .controller('TaskListController', function() {
+    var vm = this;
+    vm.tasks = [];
+    vm.newTaskName = '';
+
+    vm.addTask = function() {
+      if (vm.newTaskName) {
+        vm.tasks.push({ name: vm.newTaskName });
+        vm.newTaskName = '';
+      }
+    };
+
+    vm.editTask = function(task) {
+      var newName = prompt('Enter new task name:', task.name);
+      if (newName !== null) {
+        task.name = newName;
+      }
+    };
+
+    vm.deleteTask = function(task) {
+      var index = vm.tasks.indexOf(task);
+      if (index !== -1) {
+        vm.tasks.splice(index, 1);
+      }
+    };
+  });
+</script>
+</body>
+</html>
