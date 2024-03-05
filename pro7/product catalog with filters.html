@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="productCatalogApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Catalog</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.product-list {
+  margin-top: 20px;
+}
+.product {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+.product img {
+  max-width: 100%;
+  height: auto;
+}
+.filters {
+  margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="ProductCatalogController as productCtrl">
+  <h1>Product Catalog</h1>
+  <div class="filters">
+    <label>Category:</label>
+    <select ng-model="productCtrl.selectedCategory">
+      <option value="">All</option>
+      <option ng-repeat="category in productCtrl.categories" value="{{ category }}">{{ category }}</option>
+    </select>
+    <label>Feature:</label>
+    <select ng-model="productCtrl.selectedFeature">
+      <option value="">All</option>
+      <option ng-repeat="feature in productCtrl.features" value="{{ feature }}">{{ feature }}</option>
+    </select>
+    <input type="text" placeholder="Search..." ng-model="productCtrl.searchText">
+  </div>
+  <div class="row">
+    <div class="col-md-4" ng-repeat="product in productCtrl.filteredProducts">
+      <div class="product">
+        <img src="{{ product.image }}" alt="{{ product.name }}">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Category: {{ product.category }}</p>
+        <p>Features: {{ product.features.join(', ') }}</p>
+        <p>Price: {{ product.price }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+angular.module('productCatalogApp', [])
+  .controller('ProductCatalogController', function() {
+    var vm = this;
+    vm.products = [
+      { name: 'Product 1', category: 'Category 1', features: ['Feature 1', 'Feature 2'], price: 100, image: 'product1.jpg', description: 'Description of Product 1' },
+      { name: 'Product 2', category: 'Category 2', features: ['Feature 1', 'Feature 3'], price: 150, image: 'product2.jpg', description: 'Description of Product 2' },
+      { name: 'Product 3', category: 'Category 1', features: ['Feature 2', 'Feature 3'], price: 200, image: 'product3.jpg', description: 'Description of Product 3' },
+    ];
+    vm.categories = ['Category 1', 'Category 2'];
+    vm.features = ['Feature 1', 'Feature 2', 'Feature 3'];
+    vm.selectedCategory = '';
+    vm.selectedFeature = '';
+    vm.searchText = '';
+
+    vm.filteredProducts = vm.products;
+
+    vm.filterProducts = function() {
+      vm.filteredProducts = vm.products.filter(function(product) {
+        var categoryMatch = vm.selectedCategory === '' || product.category === vm.selectedCategory;
+        var featureMatch = vm.selectedFeature === '' || product.features.includes(vm.selectedFeature);
+        var searchMatch = vm.searchText === '' || product.name.toLowerCase().includes(vm.searchText.toLowerCase());
+        return categoryMatch && featureMatch && searchMatch;
+      });
+    };
+
+    vm.filterProducts();
+  });
+</script>
+</body>
+</html>
