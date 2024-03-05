@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="todoApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List Application</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.todo-list {
+  margin-top: 20px;
+}
+.todo-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+.todo-item.complete {
+  text-decoration: line-through;
+  background-color: #e0f7fa;
+}
+.todo-item.complete:hover {
+  background-color: #b2ebf2;
+}
+.add-form {
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="TodoController as todoCtrl">
+  <h1>To-Do List Application</h1>
+  <ul class="list-unstyled todo-list">
+    <li class="todo-item" ng-repeat="task in todoCtrl.tasks" ng-class="{ 'complete': task.complete }">
+      {{ task.name }}
+      <button class="btn btn-success btn-xs" ng-click="todoCtrl.completeTask(task)">Complete</button>
+      <button class="btn btn-danger btn-xs" ng-click="todoCtrl.deleteTask(task)">Delete</button>
+    </li>
+  </ul>
+  <form class="add-form" ng-submit="todoCtrl.addTask()">
+    <div class="form-group">
+      <input type="text" class="form-control" ng-model="todoCtrl.newTaskName" placeholder="Add a new task..." required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Task</button>
+  </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+angular.module('todoApp', [])
+  .controller('TodoController', function() {
+    var vm = this;
+    vm.tasks = [];
+    vm.newTaskName = '';
+
+    vm.addTask = function() {
+      if (vm.newTaskName) {
+        vm.tasks.push({ name: vm.newTaskName, complete: false });
+        vm.newTaskName = '';
+      }
+    };
+
+    vm.completeTask = function(task) {
+      task.complete = true;
+    };
+
+    vm.deleteTask = function(task) {
+      var index = vm.tasks.indexOf(task);
+      if (index !== -1) {
+        vm.tasks.splice(index, 1);
+      }
+    };
+  });
+</script>
+</body>
+</html>
