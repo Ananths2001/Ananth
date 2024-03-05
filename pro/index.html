@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+	<title>Image Gallery</title>
+</head>
+<body>
+
+<div class="heading">
+	<h1>Interactive Image Gallery</h1>
+</div>
+
+	<div class="gallery">
+<img src=
+"https://www.supercars.net/blog/wp-content/uploads/2020/09/wallpaperflare.com_wallpaper-1-1.jpg" 
+alt="Image 2" class="gallery-img" onclick="showImage(src)">
+<img src="https://images8.alphacoders.com/116/1168080.jpg"
+alt="Image 3" class="gallery-img" onclick="showImage(src)">
+<img src="https://wallpaperset.com/w/full/4/4/b/83590.jpg" alt="Image 4" class="gallery-img" onclick="showImage(src)">
+<img src="https://wallpapercave.com/wp/wp12397452.jpg" alt="Image 5" class="gallery-img" onclick="showImage(src)">
+<img src="https://www.hdwallpapers.in/download/car_ferrari_laferrari_red_car_sport_car_supercar_4k_hd_cars-1366x768.jpg" 
+alt="Image 6" class="gallery-img" onclick="showImage(src)">
+<img src="https://images.pexels.com/photos/10550012/pexels-photo-10550012.jpeg?cs=srgb&dl=pexels-auto-records-10550012.jpg&fm=jpg"
+alt="Image 7" class="gallery-img" onclick="showImage(src)">
+<img src="https://www.pixel4k.com/wp-content/uploads/2018/10/mclaren-supercar_1539111183.jpg" 
+alt="Image 8" class="gallery-img" onclick="showImage(src)">
+<img src="https://wallpapers.com/images/hd/supercar-green-bugatti-divo-986f8ldbdxm0h7ym.jpg"
+alt="Image 9" class="gallery-img" onclick="showImage(src)">
+<img src="https://c4.wallpaperflare.com/wallpaper/29/1013/318/black-car-car-mercedes-benz-mercedes-wallpaper-preview.jpg" 
+alt="Image 10" class="gallery-img" onclick="showImage(src)">
+<img src="https://t4.ftcdn.net/jpg/03/50/11/79/360_F_350117912_FLYQkeDzhwB55wMSRb8nPMWzIZuvtJhz.jpg" 
+alt="Image 10" class="gallery-img" onclick="showImage(src)">		 
+</div>
+
+	<div class="image-popup-container" id="imagePopup">
+		<span class="close-button" onclick="closeImage()">×</span>
+		<img src="" alt="Popup Image" id="popupImage">
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
