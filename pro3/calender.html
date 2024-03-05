@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="calendarApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Calendar</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.calendar {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+.calendar th,
+.calendar td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+.calendar th {
+  background-color: #f2f2f2;
+}
+.calendar td {
+  height: 100px;
+}
+.calendar .current-month {
+  background-color: #f9f9f9;
+}
+.event {
+  background-color: #ffc107;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="CalendarController as calendarCtrl">
+  <h1>Event Calendar</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="date" class="form-control" ng-model="calendarCtrl.newEventDate">
+      </div>
+      <div class="form-group">
+        <label>Event:</label>
+        <input type="text" class="form-control" ng-model="calendarCtrl.newEventName">
+      </div>
+      <button class="btn btn-primary" ng-click="calendarCtrl.addEvent()">Add Event</button>
+    </div>
+    <div class="col-md-8">
+      <table class="calendar">
+        <thead>
+          <tr>
+            <th ng-repeat="day in calendarCtrl.daysInWeek">{{ day }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="week in calendarCtrl.calendar">
+            <td ng-repeat="day in week" ng-class="{ 'current-month': day.month === calendarCtrl.currentMonth }">
+              {{ day.day }}
+              <div class="event" ng-repeat="event in day.events">{{ event.name }}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+angular.module('calendarApp', [])
+  .controller('CalendarController', function() {
+    var vm = this;
+    vm.daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    vm.monthsInYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    vm.currentDate = new Date();
+    vm.currentMonth = vm.currentDate.getMonth();
+    vm.currentYear = vm.currentDate.getFullYear();
+
+    vm.calendar = [];
+
+    function initCalendar() {
+      var firstDayOfMonth = new Date(vm.currentYear, vm.currentMonth, 1);
+      var firstDayOfWeek = firstDayOfMonth.getDay();
+      var daysInMonth = new Date(vm.currentYear, vm.currentMonth + 1, 0).getDate();
+
+      var calendar = [];
+      var day = 1;
+      for (var i = 0; i < 6; i++) {
+        var week = [];
+        for (var j = 0; j < 7; j++) {
+          if ((i === 0 && j < firstDayOfWeek) || day > daysInMonth) {
+            week.push({});
+          } else {
+            week.push({ day: day, month: vm.currentMonth + 1, year: vm.currentYear, events: [] });
+            day++;
+          }
+        }
+        calendar.push(week);
+        if (day > daysInMonth) {
+          break;
+        }
+      }
+      vm.calendar = calendar;
+    }
+
+    initCalendar();
+
+    vm.addEvent = function() {
+      var dateParts = vm.newEventDate.split('-');
+      var eventDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+      if (eventDate.getMonth() === vm.currentMonth && eventDate.getFullYear() === vm.currentYear) {
+        var dayOfMonth = eventDate.getDate();
+        for (var week of vm.calendar) {
+          for (var day of week) {
+            if (day.day === dayOfMonth) {
+              day.events.push({ name: vm.newEventName });
+              break;
+            }
+          }
+        }
+      }
+      vm.newEventDate = '';
+      vm.newEventName = '';
+    };
+  });
+</script>
+</body>
+</html>
