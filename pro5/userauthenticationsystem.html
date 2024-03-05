@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="authApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Authentication System</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.auth-container {
+  margin-top: 20px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="AuthController as authCtrl">
+  <h1>User Authentication System</h1>
+  <div class="auth-container" ng-show="!authCtrl.isAuthenticated">
+    <h2>Sign Up</h2>
+    <form ng-submit="authCtrl.signUp()">
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" class="form-control" ng-model="authCtrl.signUpEmail" required>
+      </div>
+      <div class="form-group">
+        <label>Password:</label>
+        <input type="password" class="form-control" ng-model="authCtrl.signUpPassword" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <h2>Log In</h2>
+    <form ng-submit="authCtrl.logIn()">
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" class="form-control" ng-model="authCtrl.logInEmail" required>
+      </div>
+      <div class="form-group">
+        <label>Password:</label>
+        <input type="password" class="form-control" ng-model="authCtrl.logInPassword" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Log In</button>
+    </form>
+  </div>
+  <div ng-show="authCtrl.isAuthenticated">
+    <h2>Welcome, {{ authCtrl.userEmail }}</h2>
+    <p>Here is your personalized content...</p>
+    <button class="btn btn-danger" ng-click="authCtrl.logOut()">Log Out</button>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+angular.module('authApp', [])
+  .controller('AuthController', function() {
+    var vm = this;
+    vm.isAuthenticated = false;
+    vm.userEmail = '';
+
+    vm.signUp = function() {
+      // Implement sign up logic here
+      vm.isAuthenticated = true;
+      vm.userEmail = vm.signUpEmail;
+    };
+
+    vm.logIn = function() {
+      // Implement log in logic here
+      vm.isAuthenticated = true;
+      vm.userEmail = vm.logInEmail;
+    };
+
+    vm.logOut = function() {
+      vm.isAuthenticated = false;
+      vm.userEmail = '';
+    };
+  });
+</script>
+</body>
+</html>
