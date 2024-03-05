@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dashboardApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Analytics Page</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.dashboard-container {
+  margin-top: 20px;
+}
+.chart-container {
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="DashboardController as dashboardCtrl">
+  <h1>Dashboard Analytics Page</h1>
+  <div class="dashboard-container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="chart-container">
+          <canvas id="chart1"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="chart-container">
+          <canvas id="chart2"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+angular.module('dashboardApp', [])
+  .controller('DashboardController', function($http) {
+    var vm = this;
+
+    // Sample data for charts
+    var chartData1 = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [{
+        label: 'Sales',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    };
+
+    var chartData2 = {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: 'Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(153, 102, 255)',
+          'rgb(255, 159, 64)'
+        ],
+        hoverOffset: 4
+      }]
+    };
+
+    var chart1 = new Chart(document.getElementById('chart1').getContext('2d'), {
+      type: 'line',
+      data: chartData1
+    });
+
+    var chart2 = new Chart(document.getElementById('chart2').getContext('2d'), {
+      type: 'doughnut',
+      data: chartData2
+    });
+
+  });
+</script>
+</body>
+</html>
