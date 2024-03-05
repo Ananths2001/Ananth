@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="chatApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-time Chat Application</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.chat-container {
+  margin-top: 20px;
+}
+.message-list {
+  list-style-type: none;
+  padding: 0;
+}
+.message {
+  margin-bottom: 10px;
+}
+.message .username {
+  font-weight: bold;
+}
+.message .time {
+  font-size: 0.8em;
+  color: #888;
+}
+.message-input {
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="ChatController as chatCtrl">
+  <h1>Real-time Chat Application</h1>
+  <ul class="message-list">
+    <li class="message" ng-repeat="message in chatCtrl.messages">
+      <span class="username">{{ message.username }}</span>
+      <span class="time">{{ message.time }}</span><br>
+      {{ message.text }}
+    </li>
+  </ul>
+  <form ng-submit="chatCtrl.sendMessage()">
+    <div class="form-group message-input">
+      <input type="text" class="form-control" ng-model="chatCtrl.newMessageText" placeholder="Type your message...">
+    </div>
+    <button type="submit" class="btn btn-primary">Send</button>
+  </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.1.3/firebase-app.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.1.3/firebase-database.min.js"></script>
+<script>
+// Initialize Firebase
+var firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+
+angular.module('chatApp', [])
+  .controller('ChatController', function($scope) {
+    var vm = this;
+    vm.messages = [];
+    vm.newMessageText = '';
+
+    var database = firebase.database().ref('messages');
+    database.on('child_added', function(snapshot) {
+      $scope.$apply(function() {
+        vm.messages.push(snapshot.val());
+      });
+    });
+
+    vm.sendMessage = function() {
+      var newMessage = {
+        username: 'User',
+        text: vm.newMessageText,
+        time: new Date().toLocaleTimeString()
+      };
+      database.push(newMessage);
+      vm.newMessageText = '';
+    };
+  });
+</script>
+</body>
+</html>
