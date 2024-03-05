@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizApp">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Quiz App</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+.quiz-container {
+  margin-top: 20px;
+}
+.question {
+  margin-bottom: 20px;
+}
+.options {
+  list-style-type: none;
+  padding: 0;
+}
+.option {
+  margin-bottom: 10px;
+}
+.result {
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-controller="QuizController as quizCtrl">
+  <h1>Interactive Quiz App</h1>
+  <div class="quiz-container" ng-show="quizCtrl.showQuiz">
+    <div class="question">{{ quizCtrl.currentQuestion.question }}</div>
+    <ul class="options">
+      <li class="option" ng-repeat="option in quizCtrl.currentQuestion.options">
+        <label>
+          <input type="radio" ng-model="quizCtrl.selectedOption" ng-value="option">{{ option }}
+        </label>
+      </li>
+    </ul>
+    <button class="btn btn-primary" ng-click="quizCtrl.submitAnswer()">Submit</button>
+  </div>
+  <div class="result" ng-show="quizCtrl.showResult">
+    Your score: {{ quizCtrl.score }}/{{ quizCtrl.questions.length }}
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+angular.module('quizApp', [])
+  .controller('QuizController', function() {
+    var vm = this;
+    vm.questions = [
+      { question: 'Question 1', options: ['Option A', 'Option B', 'Option C'], answer: 'Option A' },
+      { question: 'Question 2', options: ['Option A', 'Option B', 'Option C'], answer: 'Option B' },
+      { question: 'Question 3', options: ['Option A', 'Option B', 'Option C'], answer: 'Option C' }
+    ];
+    vm.currentQuestionIndex = 0;
+    vm.currentQuestion = vm.questions[vm.currentQuestionIndex];
+    vm.score = 0;
+    vm.showQuiz = true;
+    vm.showResult = false;
+
+    vm.submitAnswer = function() {
+      if (vm.selectedOption === vm.currentQuestion.answer) {
+        vm.score++;
+      }
+      vm.selectedOption = null;
+      vm.currentQuestionIndex++;
+      if (vm.currentQuestionIndex < vm.questions.length) {
+        vm.currentQuestion = vm.questions[vm.currentQuestionIndex];
+      } else {
+        vm.showQuiz = false;
+        vm.showResult = true;
+      }
+    };
+  });
+</script>
+</body>
+</html>
